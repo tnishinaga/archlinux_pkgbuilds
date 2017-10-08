@@ -1,0 +1,32 @@
+# Maintainer: Toshifumi NISHINAGA <tnishinaga.dev @atmark@ gmail.com
+
+_EFI_ARCH=aarch64
+cross=aarch64-linux-gnu
+
+_pkgver="3.0.6"
+pkgname="gnu-efi-libs-aarch64"
+pkgver="${_pkgver}"
+pkgrel="1"
+pkgdesc="Library for building AArch64 UEFI Applications using GNU toolchain"
+url="http://sourceforge.net/projects/gnu-efi/"
+license=('GPL')
+arch=('x86_64' 'i686')
+options=('!strip' '!makeflags' '!buildflags')
+makedepends=('aarch64-linux-gnu-binutils' 'aarch64-linux-gnu-gcc')
+source=("http://download.sourceforge.net/gnu-efi/gnu-efi-${pkgver}.tar.bz2")
+md5sums=('46f633758a8a37db9fd6909fe270c26b')
+
+build() {
+	cd "${srcdir}/gnu-efi-${_pkgver}/"
+
+	make CROSS_COMPILE=${cross}- CFLAGS=-Werror=implicit-fallthrough=0 lib gnuefi inc apps
+}
+
+package() {
+	cd "${srcdir}/gnu-efi-${_pkgver}/"
+
+	make CROSS_COMPILE=${cross}- CFLAGS=-Werror=implicit-fallthrough=0 INSTALLROOT="${pkgdir}" PREFIX="/usr/${cross}" LIBDIR="/usr/${cross}/lib" install
+
+	install -d "${pkgdir}/usr/${cross}/share/gnu-efi/apps/${_EFI_ARCH}/"
+	install -D -m0644 "${srcdir}/gnu-efi-${_pkgver}/${_EFI_ARCH}/apps"/*.efi "${pkgdir}/usr/${cross}/share/gnu-efi/apps/${_EFI_ARCH}/"
+}
