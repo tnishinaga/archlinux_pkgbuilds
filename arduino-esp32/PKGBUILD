@@ -1,0 +1,46 @@
+# Maintainer: Toshifumi NISHINAGA <tnishinaga.dev AT gmail dot com>
+
+pkgname=arduino-esp32-git
+_pkgname=arduino-esp32
+pkgrel=1
+pkgver=420
+pkgdesc="A ESP32 development environment for Arduino IDE"
+arch=('x86_64' 'i686')
+url="https://github.com/espressif/arduino-esp32"
+license=('GPL')
+groups=()
+depends=("arduino")
+makedepends=('git' 'python2')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=('!strip')
+install=
+source=("git+https://github.com/espressif/arduino-esp32")
+noextract=()
+md5sums=(SKIP) #generate with 'makepkg -g'
+
+
+pkgver() {
+  cd "$srcdir/$_pkgname"
+  git rev-list --count HEAD
+}
+
+build() {
+  cd "$srcdir/$_pkgname/"
+  git submodule update --init --recursive
+  cd "$srcdir/$_pkgname/tools"
+  python2 get.py
+
+  # fix python version problem
+  # see https://github.com/espressif/arduino-esp32/issues/236
+  sed -i -e "s/python/python2/" "$srcdir/$_pkgname/platform.txt"
+}
+
+package() {
+  mkdir -p ${pkgdir}/usr/share/arduino/hardware/espressif
+  cp -R "$srcdir/$_pkgname" ${pkgdir}/usr/share/arduino/hardware/espressif/esp32
+}
+
+# vim:set ts=2 sw=2 et:
