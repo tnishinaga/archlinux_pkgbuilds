@@ -1,0 +1,42 @@
+# Maintainer: Toshifumi NISHINAGA <tnishinaga.dev @atmark@ gmail.com>
+
+pkgname=snap-sync-git
+pkgver=r188.4951623
+pkgrel=1
+pkgdesc="Sync snapper snapshots to external drive or remote server(rzerres's fork version)"
+arch=('any')
+url="https://github.com/rzerres/snap-sync"
+license=('GPL')
+groups=()
+depends=('snapper' 'libnotify')
+makedepends=('git')
+provides=("$pkgname%-git")
+conflicts=("$pkgname%-git")
+replaces=()
+backup=()
+options=()
+install=
+source=('git+https://github.com/rzerres/snap-sync#branch=wip-dash-v2'
+	'snap-sync-49516239803fab476802d0f3c632f01c539eecef.patch'
+)
+noextract=()
+md5sums=('SKIP'
+	'7c007c9127ca3b823f33e09362bbd676'
+)
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+	  cd "$srcdir/${pkgname%-git}"
+	  patch -p1 -i $srcdir/snap-sync-49516239803fab476802d0f3c632f01c539eecef.patch
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}"
+	mkdir -p "${pkgdir}/etc/snapper/config-templates"
+	make SNAPPER_CONFIG="${pkgdir}/etc/conf.d/snapper" DESTDIR="$pkgdir" install
+}
+
