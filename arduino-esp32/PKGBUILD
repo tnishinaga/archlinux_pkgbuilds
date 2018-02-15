@@ -7,7 +7,7 @@ pkgver=420
 pkgdesc="A ESP32 development environment for Arduino IDE"
 arch=('x86_64' 'i686')
 url="https://github.com/espressif/arduino-esp32"
-license=('GPL')
+license=('LGPL2.1')
 groups=()
 depends=("arduino")
 makedepends=('git' 'python2')
@@ -43,4 +43,3 @@ package() {
   cp -R "$srcdir/$_pkgname" ${pkgdir}/usr/share/arduino/hardware/espressif/esp32
 }
 
-# vim:set ts=2 sw=2 et:
