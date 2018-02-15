@@ -1,4 +1,4 @@
-# Maintainer: Toshifumi NISHINAGA <tnishinaga.dev @atmark@ gmail.com
+# Maintainer: Toshifumi NISHINAGA <tnishinaga.dev @atmark@ gmail.com>
 
 _EFI_ARCH=aarch64
 cross=aarch64-linux-gnu
