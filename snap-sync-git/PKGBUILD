@@ -21,7 +21,7 @@ source=('git+https://github.com/rzerres/snap-sync#branch=wip-dash-v2'
 )
 noextract=()
 md5sums=('SKIP'
-	'7c007c9127ca3b823f33e09362bbd676'
+	'a3238a86d5f0902d1d32faeb075acd6b'
 )
 
 pkgver() {
